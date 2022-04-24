@@ -13,4 +13,4 @@ SELECT
 FROM locations
 NATURAL JOIN countries;
 ```
-![Cover]()
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/1.png)
