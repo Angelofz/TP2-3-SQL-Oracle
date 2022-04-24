@@ -321,3 +321,112 @@ SELECT * FROM MY_EMPLOYEE;
 ```
 ![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/23.png)
 
+## Exercice 10
+
+1. Créez la table `DEPT` conformément aux indications du tableau ci-après. Enregistrez l'instruction dans un script nommé ex_10_01.sql, puis exécutez ce script pour créer la table.
+
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/24.png)
+
+```sql
+CREATE TABLE DEPT
+(
+    ID NUMBER(7),
+    NAME VARCHAR2(25),
+    CONSTRAINT ID_PKK PRIMARY KEY (ID)
+);
+```
+Vérifiez que la table a bien été créée.
+```sql
+DESCRIBE DEPT;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/25.png)
+
+2. Remplissez la table `DEPT` avec les données de la table `DEPARTMENTS`. Inclure uniquement les colonnes dont vous avez besoin
+
+```sql
+INSERT INTO DEPT(ID,NAME)
+SELECT DEPARTMENT_ID,DEPARTMENT_NAME
+FROM DEPARTMENTS;
+```
+```sql
+SELECT * FROM DEPT;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/26.png)
+
+3. Créez la table `EMP` conformément aux indications du tableau ci-après. Enregistrez l'instruction dans un script nommé ex_10_03.sql, puis exécutez ce script pour créer la table.
+ 
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/27.png)
+
+```sql
+CREATE TABLE EMP
+(
+    ID NUMBER(7),
+    LAST_NAME VARCHAR2(25),
+    FIRST_NAME VARCHAR2(25),
+    DEPT_ID NUMBER(7),
+    CONSTRAINT DEPT_ID_FK FOREIGN KEY (DEPT_ID) REFERENCES DEPT(ID)
+);
+```
+Vérifiez que la table a bien été créée.
+```sql
+DESCRIBE EMP;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/28.png)
+
+4. Créez la table `EMPLOYEES2` en utilisant la structure de la table `EMPLOYEES`. Inclure uniquement les colonnes `EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `SALARY` et `DEPARTMENT_ID`. Intitulez les colonnes de la nouvelle table respectivement `ID`, `FIRST_NAME`, `LAST_NAME`, `SALARY` et `DEPT_ID`.
+
+```sql
+DESCRIBE EMPLOYEES;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/29.png)
+
+```sql
+CREATE TABLE EMPLOYEES2
+(
+    ID NUMBER(6,0),
+    FIRST_NAME VARCHAR2(20) NOT NULL,
+    LAST_NAME VARCHAR2(25) NOT NULL,
+    SALARY NUMBER(8,2),
+    DEPT_ID NUMBER(4,0),
+    CONSTRAINT EMPLOYEE2_ID_PK PRIMARY KEY (ID),
+    CONSTRAINT EMPLOYEES2_SALARY_CK CHECK (SALARY > 0),
+    CONSTRAINT EMPLOYEE2_DEPT_ID_FK FOREIGN KEY (DEPT_ID) REFERENCES DEPARTMENTS(DEPARTMENT_ID)
+);
+```
+```sql
+DESCRIBE EMPLOYEES2;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/30.png)
+
+5. Placez la table `EMPLOYEES2` en mode lecture seule.
+
+```sql
+ALTER TABLE EMPLOYEES2 READ ONLY;
+```
+
+6. Essayez d'insérer la ligne suivante dans la table `EMPLOYEES2` :
+
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/31.png)
+
+```sql
+INSERT INTO EMPLOYEES2(ID,FIRST_NAME,LAST_NAME,SALARY,DEPT_ID)
+VALUES(34,'Grant','Marcie',5678,10);
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/32.png)
+
+7. Remettez la table `EMPLOYEES2` en mode lecture-écriture. Essayez à nouveau d'insérer la même ligne.
+
+```sql
+ALTER TABLE EMPLOYEES2 READ WRITE;
+```
+```sql
+INSERT INTO EMPLOYEES2(ID,FIRST_NAME,LAST_NAME,SALARY,DEPT_ID)
+VALUES(34,'Grant','Marcie',5678,10);
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/33.png)
+
+8. Supprimez la table EMPLOYEES2.
+
+```sql
+DROP TABLE EMPLOYEES2;
+```
