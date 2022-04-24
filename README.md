@@ -425,8 +425,106 @@ VALUES(34,'Grant','Marcie',5678,10);
 ```
 ![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/33.png)
 
-8. Supprimez la table EMPLOYEES2.
+8. Supprimez la table `EMPLOYEES2`.
 
 ```sql
 DROP TABLE EMPLOYEES2;
+```
+
+## Exercice 11
+
+1. Le département des ressources humaines souhaite masquer certaines des données de la table `EMPLOYEES`. Il souhaite obtenir une vue nommée `EMPLOYEES_VU`, comprenant les ID et les noms d'employé ainsi que les ID de département de la table `EMPLOYEES`. L'en-tête `EMPLOYEE` doit être attribué à la colonne contenant les noms d'employé.
+
+```sql
+CREATE OR REPLACE VIEW EMPLOYEES_VU
+AS SELECT
+    employee_id,
+    last_name as EMPLOYEE,
+    department_id
+    FROM employees;
+```    
+
+2. Vérifiez que la vue fonctionne. Affichez le contenu de la vue `EMPLOYEES_VU`.
+```sql
+SELECT * FROM EMPLOYEES_VU;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/34.png)
+
+3. A l'aide de la vue `EMPLOYEES_VU`, écrivez pour le département des ressources humaines une interrogation permettant d'afficher les noms d'employé et les ID de département correspondants.
+
+```sql
+SELECT
+    employee,
+    department_id
+FROM EMPLOYEES_VU;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/35.png)
+
+4. Le département 50 a besoin d'accéder aux données concernant ses employés. Créez une vue nommée `DEPT50` contenant l'ID d'employé, le nom et l'ID de département de tous les employés du département 50. Vous devez intituler les colonnes de la vue `EMPNO`, `EMPLOYEE` et `DEPTNO`. Pour des raisons de sécurité, n'autorisez pas le transfert d'un employé vers un autre département par l'intermédiaire de la vue.
+
+```sql
+CREATE OR REPLACE VIEW DEPT50
+AS SELECT
+    employee_id as EMPNO,
+    last_name as EMPLOYEE,
+    department_id as DEPTNO
+    FROM employees
+    WHERE department_id = 50
+    WITH READ ONLY;
+```
+
+5. Affichez la structure et le contenu de la vue `DEPT50`.
+```sql
+DESCRIBE DEPT50;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/36.png)
+```sql
+SELECT * FROM DEPT50;
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/37.png)
+
+6. Testez la vue. Tentez de transférer Matos vers le département 80.
+
+```sql
+UPDATE DEPT50
+SET DEPTNO = 80
+WHERE EMPLOYEE = 'Matos';
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/38.png)
+
+7. Vous avez besoin d'une séquence pouvant être utilisée avec la colonne PRIMARY KEY de la table `DEPT`. La séquence doit commencer à 200 et présenter une valeur maximum de 1 000. La séquence doit croître par incréments de 10. Nommez-la `DEPT_ID_SEQ`.
+
+```sql
+CREATE SEQUENCE DEPT_ID_SEQ
+    INCREMENT BY 10
+    START WITH 200
+    MAXVALUE 1000;
+```
+
+8. Pour tester la séquence, écrivez un script permettant d'insérer deux lignes dans la table `DEPT`. Nommez le script ex_11_08.sql. Veillez à utiliser la séquence que vous avez créée pour la colonne ID. Ajoutez deux départements : Education et Administration.
+
+```sql
+INSERT INTO DEPT(ID,NAME) VALUES(DEPT_ID_SEQ.NEXTVAL,'Education');
+INSERT INTO DEPT(ID,NAME) VALUES(DEPT_ID_SEQ.NEXTVAL,'Administration');
+```
+Vérifiez vos ajouts.
+```sql
+SELECT *
+FROM DEPT
+WHERE NAME IN ('Education','Administration');
+```
+![Cover](https://github.com/Angelofz/TP2-SQL-Oracle/blob/main/image/39.png)
+
+9. Créez un index non unique sur la colonne NAME de la table DEPT.
+
+```sql
+CREATE INDEX DEPT_NAME_IDX
+ON DEPT(NAME);
+```
+
+10. Créez un synonyme pour la table EMPLOYEES. Nommez-le EMP.
+
+```sql
+CREATE SYNONYM EMP
+FOR EMPLOYEES;
 ```
